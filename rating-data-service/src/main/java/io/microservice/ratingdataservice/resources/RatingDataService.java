@@ -13,8 +13,9 @@ import io.microservice.ratingdataservice.model.RatingInfo;
 @RequestMapping("/ratings")
 public class RatingDataService {
 
-	@RequestMapping("{userId}")
-	public List<RatingInfo> getUserRatingInfo(@PathVariable("userId") String userId) {
+	@RequestMapping("{movieId}")
+	public List<RatingInfo> getUserRatingInfo(@PathVariable("movieId") String movieId) {
+		
 		return Collections.singletonList(new RatingInfo("gaurav1", "movie01", 5));
 	}
 }

@@ -1,4 +1,4 @@
-package io.microservice.ratingdataservice.model;
+package io.microservice.moviecatalogservice.models;
 
 public class RatingInfo {
 

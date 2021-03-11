@@ -1,4 +1,4 @@
-package io.microservice.movieinfoservice.models;
+package io.microservice.moviecatalogservice.models;
 
 public class MovieInfo {
 
