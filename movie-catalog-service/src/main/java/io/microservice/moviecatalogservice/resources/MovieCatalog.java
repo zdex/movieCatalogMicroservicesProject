@@ -15,6 +15,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import io.microservice.moviecatalogservice.models.CatalogItem;
 import io.microservice.moviecatalogservice.models.MovieInfo;
 import io.microservice.moviecatalogservice.models.RatingInfo;
+import io.microservice.moviecatalogservice.models.UserRatings;
 
 @RestController
 @RequestMapping("/catalog")
@@ -43,14 +44,18 @@ public class MovieCatalog {
 		//3. consolidate both data and return
 		
 		//step 1 - hard code it for now and create list of ratings model
-		List<RatingInfo> ratings = Arrays.asList(
-				new RatingInfo("movie01", 5),
-				new RatingInfo("movie02", 7));
+		/*
+		 * List<RatingInfo> ratings = Arrays.asList( new RatingInfo("movie01", 5), new
+		 * RatingInfo("movie02", 7));
+		 */
 		
+		UserRatings ratings = template.getForObject("http://localhost:8082/ratings/userRatings/"+ userId, UserRatings.class); 
 		//step 2 - 
 		
-		return ratings.stream().map(rating -> {
-			MovieInfo movieInfo = template.getForObject("http://localhost:8082/movies/" + rating.getMoviedId(), MovieInfo.class);
+		/*return ratings.stream().map(rating -> {
+			MovieInfo movieInfo = template.getForObject("http://localhost:8082/movies/" + rating.getMoviedId(), MovieInfo.class);*/
+		return ratings.getRatings().stream().map(rating -> {
+			MovieInfo movieInfo = template.getForObject("http://localhost:8083/movies/" + rating.getMoviedId(), MovieInfo.class);
 			//MovieInfo movieInfo = webclientBuilder.build().get().uri("http://localhost:8082/movies/" + rating.getMoviedId()).retrieve().bodyToMono(MovieInfo.class).block();
 
 			return new CatalogItem(userId, movieInfo.getMovieDescription(), rating.getRating());
