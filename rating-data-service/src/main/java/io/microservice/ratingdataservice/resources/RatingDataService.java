@@ -1,6 +1,6 @@
 package io.microservice.ratingdataservice.resources;
 
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,8 +14,14 @@ import io.microservice.ratingdataservice.model.RatingInfo;
 public class RatingDataService {
 
 	@RequestMapping("{movieId}")
-	public List<RatingInfo> getUserRatingInfo(@PathVariable("movieId") String movieId) {
-		
-		return Collections.singletonList(new RatingInfo("gaurav1", "movie01", 5));
+	public RatingInfo getMovieRatingInfo(@PathVariable("movieId") String movieId) {		
+		return new RatingInfo("movie01", 5);
+	} 
+	
+	@RequestMapping("users/{userId}")
+	public List<RatingInfo> getUserRatingInfo(@PathVariable("userId") String userId) {	
+		return Arrays.asList(new RatingInfo("movie01", 5),
+				new RatingInfo("movie02", 7));
+		//return Collections.singletonList(new RatingInfo("gaurav1", "movie01", 5));
 	}
 }

@@ -2,29 +2,19 @@ package io.microservice.moviecatalogservice.models;
 
 public class RatingInfo {
 
-	private String userId;
 	private String moviedId;
 	private int rating;
 
-	
 	public RatingInfo() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public RatingInfo(String userId, String moviedId, int rating) {
+	public RatingInfo(String moviedId, int rating) {
 		super();
-		this.userId = userId;
+
 		this.moviedId = moviedId;
 		this.rating = rating;
-	}
-
-	public String getUserId() {
-		return userId;
-	}
-
-	public void setUserId(String userId) {
-		this.userId = userId;
 	}
 
 	public String getMoviedId() {
@@ -49,7 +39,6 @@ public class RatingInfo {
 		int result = 1;
 		result = prime * result + ((moviedId == null) ? 0 : moviedId.hashCode());
 		result = prime * result + rating;
-		result = prime * result + ((userId == null) ? 0 : userId.hashCode());
 		return result;
 	}
 
@@ -69,17 +58,12 @@ public class RatingInfo {
 			return false;
 		if (rating != other.rating)
 			return false;
-		if (userId == null) {
-			if (other.userId != null)
-				return false;
-		} else if (!userId.equals(other.userId))
-			return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "RatingInfo [userId=" + userId + ", moviedId=" + moviedId + ", rating=" + rating + "]";
+		return "RatingInfo [moviedId=" + moviedId + ", rating=" + rating + "]";
 	}
 
 }

@@ -44,14 +44,14 @@ public class MovieCatalog {
 		
 		//step 1 - hard code it for now and create list of ratings model
 		List<RatingInfo> ratings = Arrays.asList(
-				new RatingInfo("gaurav1", "movie01", 5),
-				new RatingInfo("gaurav1", "movie02", 7));
+				new RatingInfo("movie01", 5),
+				new RatingInfo("movie02", 7));
 		
 		//step 2 - 
 		
 		return ratings.stream().map(rating -> {
-			//MovieInfo movieInfo = template.getForObject("http://localhost:8082/movies/" + rating.getMoviedId(), MovieInfo.class);
-			MovieInfo movieInfo = webclientBuilder.build().get().uri("http://localhost:8082/movies/" + rating.getMoviedId()).retrieve().bodyToMono(MovieInfo.class).block();
+			MovieInfo movieInfo = template.getForObject("http://localhost:8082/movies/" + rating.getMoviedId(), MovieInfo.class);
+			//MovieInfo movieInfo = webclientBuilder.build().get().uri("http://localhost:8082/movies/" + rating.getMoviedId()).retrieve().bodyToMono(MovieInfo.class).block();
 
 			return new CatalogItem(userId, movieInfo.getMovieDescription(), rating.getRating());
 		}).collect(Collectors.toList());
