@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,6 +24,9 @@ public class MovieCatalog {
 
 	@Autowired
 	private RestTemplate template;
+	
+	@Autowired
+	private DiscoveryClient discoveryClient; //for advanced load balancing on your own but not recommended
 	
 	@Autowired
 	private WebClient.Builder webclientBuilder;
@@ -49,13 +53,13 @@ public class MovieCatalog {
 		 * RatingInfo("movie02", 7));
 		 */
 		
-		UserRatings ratings = template.getForObject("http://localhost:8082/ratings/userRatings/"+ userId, UserRatings.class); 
+		UserRatings ratings = template.getForObject("http://RATING-DATA-SERVICE/ratings/userRatings/"+ userId, UserRatings.class); 
 		//step 2 - 
 		
 		/*return ratings.stream().map(rating -> {
 			MovieInfo movieInfo = template.getForObject("http://localhost:8082/movies/" + rating.getMoviedId(), MovieInfo.class);*/
 		return ratings.getRatings().stream().map(rating -> {
-			MovieInfo movieInfo = template.getForObject("http://localhost:8083/movies/" + rating.getMoviedId(), MovieInfo.class);
+			MovieInfo movieInfo = template.getForObject("http://MOVIE-INFO-SERVICE/movies/" + rating.getMoviedId(), MovieInfo.class);
 			//MovieInfo movieInfo = webclientBuilder.build().get().uri("http://localhost:8082/movies/" + rating.getMoviedId()).retrieve().bodyToMono(MovieInfo.class).block();
 
 			return new CatalogItem(userId, movieInfo.getMovieDescription(), rating.getRating());

@@ -31,8 +31,8 @@ public class RatingDataService {
 	public UserRatings getUserRatings(@PathVariable("userId") String userId) {
 		UserRatings ratings = new UserRatings();
 		List<RatingInfo> list = new ArrayList<RatingInfo>();
-		list= Arrays.asList(new RatingInfo("movie01", 5),
-				new RatingInfo("movie02", 7));
+		list= Arrays.asList(new RatingInfo("100", 5),
+				new RatingInfo("200", 7));
 		ratings.setRatings(list);
 		return ratings;
 		//return Collections.singletonList(new RatingInfo("movie01", 5));
