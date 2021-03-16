@@ -20,6 +20,7 @@ public class MovieInfoService {
 	@Autowired
 	private RestTemplate template;
 	
+	
 	@RequestMapping("{movieId}")
 	public MovieInfo getMovieInfo(@PathVariable("movieId") String movieId) {
 		MovieSummary movieSummary =  template.getForObject("https://api.themoviedb.org/3/movie/" + movieId + "?api_key=" + this.API_KEY, MovieSummary.class);
