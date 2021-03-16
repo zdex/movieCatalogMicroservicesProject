@@ -33,8 +33,14 @@ public class MovieCatalog {
 	@Autowired
 	private WebClient.Builder webclientBuilder;
 	
+	@Autowired
+	private UserRatingInfo userRatingInfo;
+	
+	@Autowired
+	private MovieInformation movieInformation;
+	
 	@RequestMapping("/{userId}")
-	@HystrixCommand(fallbackMethod = "getFallbackMovieCatalog")
+	//@HystrixCommand(fallbackMethod = "getFallbackMovieCatalog")
 	public List<CatalogItem> getMovieCatalog(@PathVariable("userId") String userId) {
 		/*
 		 * List<CatalogItem> list = new ArrayList<CatalogItem>();
@@ -56,22 +62,27 @@ public class MovieCatalog {
 		 * RatingInfo("movie02", 7));
 		 */
 		
-		UserRatings ratings = template.getForObject("http://RATING-DATA-SERVICE/ratings/userRatings/"+ userId, UserRatings.class); 
+		UserRatings ratings = userRatingInfo.getUserRatingData(userId);
 		//step 2 - 
 		
 		/*return ratings.stream().map(rating -> {
 			MovieInfo movieInfo = template.getForObject("http://localhost:8082/movies/" + rating.getMoviedId(), MovieInfo.class);*/
 		return ratings.getRatings().stream().map(rating -> {
-			MovieInfo movieInfo = template.getForObject("http://MOVIE-INFO-SERVICE/movies/" + rating.getMoviedId(), MovieInfo.class);
+			
 			//MovieInfo movieInfo = webclientBuilder.build().get().uri("http://localhost:8082/movies/" + rating.getMoviedId()).retrieve().bodyToMono(MovieInfo.class).block();
-
+			MovieInfo movieInfo = movieInformation.getMovieInfo(rating.getMoviedId());
 			return new CatalogItem(userId, movieInfo.getMovieDescription(), rating.getRating());
 		}).collect(Collectors.toList());
 		//return Collections.singletonList(new CatalogItem("gaurav1", "transformer", 5));
 		
 	}
 	
-	public List<CatalogItem> getFallbackMovieCatalog(@PathVariable("userId") String userId) {		
-		return Collections.singletonList(new CatalogItem("gaurav1", "transformer", 5));
-	}
+	
+	
+	
+	/*
+	 * public List<CatalogItem> getFallbackMovieCatalog(@PathVariable("userId")
+	 * String userId) { return Collections.singletonList(new CatalogItem("gaurav1",
+	 * "transformer", 5)); }
+	 */
 }
