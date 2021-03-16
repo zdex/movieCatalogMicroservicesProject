@@ -73,11 +73,8 @@ public class MovieCatalog {
 			MovieInfo movieInfo = movieInformation.getMovieInfo(rating.getMoviedId());
 			return new CatalogItem(userId, movieInfo.getMovieDescription(), rating.getRating());
 		}).collect(Collectors.toList());
-		//return Collections.singletonList(new CatalogItem("gaurav1", "transformer", 5));
-		
+		//return Collections.singletonList(new CatalogItem("gaurav1", "transformer", 5));		
 	}
-	
-	
 	
 	
 	/*
