@@ -16,10 +16,15 @@ public class MovieInformation {
 	private RestTemplate template;
 
 	@HystrixCommand(fallbackMethod = "getFallbackMovieInfo", commandProperties = {
-			   @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "1000"),
-			   @HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "5"),
-			   @HystrixProperty(name = "circuitBreaker.errorThresholdPercentage", value = "50"),
-			   @HystrixProperty(name = "circuitBreaker.sleepWindowInMilliseconds", value = "5000")})
+			@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "1000"),
+			@HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "5"),
+			@HystrixProperty(name = "circuitBreaker.errorThresholdPercentage", value = "50"),
+			@HystrixProperty(name = "circuitBreaker.sleepWindowInMilliseconds", value = "5000")},
+			threadPoolKey = "getMovieInfo", 
+			threadPoolProperties = {
+					@HystrixProperty(name = "coreSize", value = "20"),
+					@HystrixProperty(name = "maxQueueSize", value = "10")})
+
 	public MovieInfo getMovieInfo(String moviedId) {
 		MovieInfo movieInfo = template.getForObject("http://MOVIE-INFO-SERVICE/movies/" + moviedId, MovieInfo.class);
 		return movieInfo;
